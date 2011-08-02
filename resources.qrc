@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/Tango/scalable/actions/document-open.svg</file>
+        <file>icons/Tango/scalable/actions/document-save.svg</file>
+        <file>icons/Tango/scalable/actions/document-save-as.svg</file>
+        <file>icons/Tango/scalable/apps/accessories-calculator.svg</file>
+        <file>icons/Tango/scalable/mimetypes/x-office-spreadsheet.svg</file>
+        <file>icons/Tango/scalable/apps/help-browser.svg</file>
+    </qresource>
+</RCC>
