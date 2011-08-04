@@ -91,28 +91,29 @@ EntryList Calculator::confidenceIntervals(int column)
         }
     }
     
-    if (a<0.5)
-    {
-        a = 0.5;
-    }
-    if (b<0.5)
-    {
-        b = 0.5;
-    }
-    if (c<0.5)
-    {
-        c = 0.5;
-    }
-    if (d<0.5)
-    {
-        d = 0.5;
-    }
-    
     EntryList output;
     
     if (results->toCalculate(ACC)) output.append(confidenceInterval(a+d, a+b+c+d)); // Diagnostic accuracy
     if (results->toCalculate(SEN)) output.append(confidenceInterval(  a, a+c    )); // Sensitivity
     if (results->toCalculate(SPE)) output.append(confidenceInterval(  d, b+d    )); // Specificity
+    
+    if (a<0.5)
+    {
+        a = 0.1;
+    }
+    if (b<0.5)
+    {
+        b = 0.1;
+    }
+    if (c<0.5)
+    {
+        c = 0.1;
+    }
+    if (d<0.5)
+    {
+        d = 0.1;
+    }
+    
     if (results->toCalculate(PPV)) output.append(confidenceInterval(  a, a+b    )); // Positive Predictive Value
     if (results->toCalculate(NPV)) output.append(confidenceInterval(  d, c+d    )); // Negative Predictive Value
     
@@ -284,17 +285,17 @@ void Calculator::pairwiseComparision(QList<QStringList> *input, ResultsTable *ou
             
             double n = a + b + c + d;
             
-            if (b<0.5)
-            {
-                b = 0.5;
-            }
-            if (c<0.5)
-            {
-                c = 0.5;
-            }
+            double mc;
             
-            double mc = (abs(b - c) - 1.0);
-            mc = mc * mc / (b + c);
+            if (b+c<1.0)
+            {
+                mc = 0.0;
+            }
+            else
+            {
+                mc = (abs(b - c) - 1.0);
+                mc = mc * mc / (b + c);
+            }
             
             QList<double> pval;
             pval << 1.0 - boost::math::cdf(chisq1, mc);
@@ -405,7 +406,7 @@ void Calculator::pairwisePredictiveValue(const ResultsTable *ci_table, ResultsTa
             {
                 if (n[l]<0.5)
                 {
-                    n[l] = 0.5;
+                    n[l] = 0.1;
                 }
                 
                 n[0] += n[l];
@@ -557,7 +558,7 @@ void Calculator::pairwiseLikelihoodRatio(const ResultsTable *ci_table, ResultsTa
             {
                 if (n[l]<0.5)
                 {
-                    n[l] = 0.5;
+                    n[l] = 0.1;
                 }
                 
                 n[0] += n[l];
