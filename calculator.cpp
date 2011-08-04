@@ -314,12 +314,25 @@ void Calculator::pairwiseComparision(QList<QStringList> *input, ResultsTable *ou
             
             double std_err = sqrt(b + c - (b - c) * (b - c) / n) / n;
             
-            QList<double> est;
-            est << p1 - p2;
-            est << est.at(0) - z * std_err - 1.0 / n;
-            est << est.at(0) + z * std_err + 1.0 / n;
+            QList<double> ci;
+
+            double est = p1 - p2;
+
+            double low = est - z * std_err - 1.0 / n;
+            if (low<-1.0)
+            {
+                low = -1.0;
+            }
+
+            double upp = est + z * std_err + 1.0 / n;
+            if (upp>1.0)
+            {
+                upp = 1.0;
+            }
+
+            ci << est << low << upp;
             
-            row_ci.append(Entry(CI, est));
+            row_ci.append(Entry(CI, ci));
         }
         
         out_pv->appendRow(row_pv);
