@@ -29,25 +29,32 @@ Calculator::Calculator(DataTable *data, Results *results, Params *params, QObjec
 Entry Calculator::confidenceInterval(const double y, const double n)
 {
     double alpha = 1.0 - params->getConfidenceLevel();
-    
-    boost::math::fisher_f low_f(2.0*y,       2.0*(n-y+1.0));
-    boost::math::fisher_f upp_f(2.0*(y+1.0), 2.0*(n-y)    );
-    
-    double low = 1.0 / (1.0 + (n - y + 1.0) / (        y * boost::math::quantile(low_f,     alpha/2.0)));
-    double upp = 1.0 / (1.0 + (n - y      ) / ((y + 1.0) * boost::math::quantile(upp_f, 1.0-alpha/2.0)));
-    
+    double est, low, upp;
+
     if (y==0.0)
     {
         low = 0.0;
+    }
+    else
+    {
+        boost::math::fisher_f low_f(2.0*y, 2.0*(n-y+1.0));
+        low = 1.0 / (1.0 + (n - y + 1.0) / (y * boost::math::quantile(low_f, alpha/2.0)));
     }
     
     if (y==n)
     {
         upp = 1.0;
     }
+    else
+    {
+        boost::math::fisher_f upp_f(2.0*(y+1.0), 2.0*(n-y));
+        double upp = 1.0 / (1.0 + (n - y) / ((y + 1.0) * boost::math::quantile(upp_f, 1.0-alpha/2.0)));
+    }
     
+    est = y / n;
+
     QList<double> output;
-    output << y/n << low << upp;
+    output << est << low << upp;
     
     return Entry(CI, output);
 }
