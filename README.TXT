@@ -2,34 +2,34 @@
  ABOUT
  =====
 
-   BDTcomparator (Binary Diagnostic Tests Comparator) facilitates
-   selection of the best performing binary classification model or binary
-   diagnostic procedure from many possible alternatives by comparing
-   their predictions with known output measured with the use of a system
-   recognized as a gold standard.
+   The BDTcomparator (Binary Diagnostic Tests Comparator) facilitates
+   the selection of the best performing binary classification model or
+   binary diagnostic procedure from the many possible alternatives by
+   comparing their predictions with a known output measured with the use
+   of a system recognized as the gold standard.
 
-   Program calculates the estimates of accuracy, sensitivity, specificity,
-   predictive values and diagnostic likelihood ratios along with
-   appropriate confidence intervals. Furthermore all pairwise comparisons
-   with respect to above mentioned measures are calculated.
+   The program calculates the estimates of accuracy, sensitivity,
+   specificity, predictive values and diagnostic likelihood ratios along
+   with appropriate confidence intervals. Furthermore all pairwise
+   comparisons with respect to above mentioned measures are calculated.
 
-   The program is implemented in object-oriented fashion using C++
+   The program is implemented in an object-oriented fashion using C++
    programming language and Boost Math library <http://www.boost.org/>.
-   Graphical User Interface was made with Qt cross-platform application
-   framework <http://qt.nokia.com>.
+   The Graphical User Interface was made with Qt cross-platform
+   application framework <http://qt.nokia.com>.
 
-   Input data have to be given in a tab-delimited text file
-   (example data-file 'example_dataset.txt' is available with program).
-   First line have to contain variables names, any subsequent line
-   represents row of data (valid values are either ones or zeros).
-   The output is saved as a tab-delimited text file.
+   The input data has to be given in a tab-delimited text file
+   (an example data-file 'example_dataset.txt' is available with
+   program). The first line has to contain variables names, any
+   subsequent line represents a row of data (valid values are either
+   ones or zeros). The output is saved as a tab-delimited text file.
 
    Typical usage is as follows:
     - run bdtcomparator
     - open an input data file - the first icon in the top menu,
-    - set options at the right side of the program window,
+    - set options on the right side of the program window,
     - calculate the output - the second icon in the top menu,
-    - at the output tab use the combo box to browse through results,
+    - in the output tab use the combo box to browse through results,
     - save the output to a text file - the third icon in the top menu.
     
     
