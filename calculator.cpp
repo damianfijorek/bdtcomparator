@@ -48,7 +48,7 @@ Entry Calculator::confidenceInterval(const double y, const double n)
     else
     {
         boost::math::fisher_f upp_f(2.0*(y+1.0), 2.0*(n-y));
-        double upp = 1.0 / (1.0 + (n - y) / ((y + 1.0) * boost::math::quantile(upp_f, 1.0-alpha/2.0)));
+        upp = 1.0 / (1.0 + (n - y) / ((y + 1.0) * boost::math::quantile(upp_f, 1.0-alpha/2.0)));
     }
     
     est = y / n;
