@@ -18,10 +18,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "resultstable.hpp"
 
-ResultsTable::ResultsTable(Results *owner, QObject *parent) :
+ResultsTable::ResultsTable(Permutation *permutation, bool constant_columns, QObject *parent) :
     QAbstractTableModel(parent)
 {
-    this->owner = owner;
+    this->permutation = permutation;
+    this->constant_columns = constant_columns;
     
     info[0] = "";
     info[1] = "";

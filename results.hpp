@@ -24,6 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "params.hpp"
 #include "datatable.hpp"
 #include "resultstable.hpp"
+#include "permutation.hpp"
 
 const int ACC = 0;
 const int SEN = 1;
@@ -92,6 +93,9 @@ private:
     
     bool available_results[NRESULTS];
     int n_results;
+    
+    //! permutation for current order of diagnostic tests
+    Permutation *permutation;
 
 };
 

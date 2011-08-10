@@ -24,6 +24,9 @@ Results::Results(DataTable *data, Params *params, QObject *parent) :
     this->data = data;
     this->params = params;
     
+    // initialize permutation of tests
+    permutation = new Permutation(data->numberOfTests());
+    
     switch (params->getCaseToCalculate())
     {
     case ALL:
@@ -60,7 +63,7 @@ Results::Results(DataTable *data, Params *params, QObject *parent) :
         }
     }
     
-    confidence_intervals = new ResultsTable(this);
+    confidence_intervals = new ResultsTable(permutation, true);
     confidence_intervals->setHorizontalHeader(header);
     
     header = data->getHeader();
@@ -71,13 +74,13 @@ Results::Results(DataTable *data, Params *params, QObject *parent) :
     
     for (int i=0; i<NRESULTS; i++)
     {
-        pc_pv[i] = new ResultsTable(this);
+        pc_pv[i] = new ResultsTable(permutation);
         
         pc_pv[i]->setHorizontalHeader(header);
         pc_pv[i]->setVerticalHeader(header);
         pc_pv[i]->higlight = &pc_hl[i];
         
-        pc_ci[i] = new ResultsTable(this);
+        pc_ci[i] = new ResultsTable(permutation);
         
         pc_ci[i]->setHorizontalHeader(header);
         pc_ci[i]->setVerticalHeader(header);
@@ -93,6 +96,8 @@ Results::~Results()
         delete pc_pv[i];
         delete pc_ci[i];
     }
+    
+    delete permutation;
 }
 
 void Results::buildHighlightTable(ResultsTable *table, QList<BoolList> *hl_table)
