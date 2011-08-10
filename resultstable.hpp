@@ -24,11 +24,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QVector>
 #include <QBrush>
 
+#include "permutation.hpp"
+
 const int EMPTY = -1;
 const int PV = 100;
 const int CI = 200;
-
-class Results;
 
 class Entry
 {
@@ -53,7 +53,7 @@ class ResultsTable : public QAbstractTableModel
     Q_OBJECT
     
 public:
-    explicit ResultsTable(Results *owner, QObject *parent = 0);
+    explicit ResultsTable(Permutation *permutation, bool constant_columns = false, QObject *parent = 0);
     
     int rowCount(const QModelIndex &parent=QModelIndex()) const
     {
@@ -85,7 +85,20 @@ public:
         {
         case Qt::DisplayRole:
         {
-            Entry e = results.at(index.row()).at(index.column());
+            int row, col;
+            
+            row = permutation->at(index.row());
+            
+            if (constant_columns)
+            {
+                col = index.column();
+            }
+            else
+            {
+                col =  permutation->at(index.column());
+            }
+            
+            Entry e = results.at(row).at(col);
             QString out;
             
             switch (e.type)
@@ -216,11 +229,14 @@ signals:
 public slots:
     
 private:
-    Results *owner;
+    Permutation *permutation;
     
     QList<EntryList> results;
     QStringList vertical_header;
     QStringList horizontal_header;
+    
+    //! is the column order constant
+    bool constant_columns;
     
 };
 

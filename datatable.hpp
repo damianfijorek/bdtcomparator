@@ -124,6 +124,13 @@ public:
     {
         return active_rows.at(x);
     }
+    
+    //! returns number of diagnostic test in data
+    int numberOfTests() const
+    {
+        // all columns in data minus gold standard column
+        return columnCount() - 1;
+    }
 
 signals:
 
