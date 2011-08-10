@@ -28,6 +28,8 @@ const int EMPTY = -1;
 const int PV = 100;
 const int CI = 200;
 
+class Results;
+
 class Entry
 {
 public:
@@ -51,7 +53,7 @@ class ResultsTable : public QAbstractTableModel
     Q_OBJECT
     
 public:
-    explicit ResultsTable(QObject *parent = 0);
+    explicit ResultsTable(Results *owner, QObject *parent = 0);
     
     int rowCount(const QModelIndex &parent=QModelIndex()) const
     {
@@ -214,6 +216,8 @@ signals:
 public slots:
     
 private:
+    Results *owner;
+    
     QList<EntryList> results;
     QStringList vertical_header;
     QStringList horizontal_header;

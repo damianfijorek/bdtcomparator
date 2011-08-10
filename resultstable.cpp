@@ -18,9 +18,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "resultstable.hpp"
 
-ResultsTable::ResultsTable(QObject *parent) :
+ResultsTable::ResultsTable(Results *owner, QObject *parent) :
     QAbstractTableModel(parent)
 {
+    this->owner = owner;
+    
     info[0] = "";
     info[1] = "";
     info[2] = "";
