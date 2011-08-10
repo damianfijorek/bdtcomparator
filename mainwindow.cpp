@@ -166,16 +166,16 @@ void MainWindow::on_actionSave_Results_triggered()
                 int id = results_map[i] - 1;
                 if (id%2==0)
                 {
-                    res = &results->pc_pv[id/2];
+                    res = results->pc_pv[id/2];
                 }
                 else
                 {
-                    res = &results->pc_ci[id/2];
+                    res = results->pc_ci[id/2];
                 }
             }
             else
             {
-                res = &results->confidence_intervals;
+                res = results->confidence_intervals;
             }
             
             output << results_list[i] << "\n";
@@ -233,16 +233,16 @@ void MainWindow::setResults(int id)
             id = results_map[id] - 1;
             if (id%2==0)
             {
-                res = &results->pc_pv[id/2];
+                res = results->pc_pv[id/2];
             }
             else
             {
-                res = &results->pc_ci[id/2];
+                res = results->pc_ci[id/2];
             }
         }
         else
         {
-            res = &results->confidence_intervals;
+            res = results->confidence_intervals;
         }
         
         ui->resultsView->setModel(res);

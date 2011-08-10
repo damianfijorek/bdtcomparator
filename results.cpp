@@ -60,22 +60,38 @@ Results::Results(DataTable *data, Params *params, QObject *parent) :
         }
     }
     
-    confidence_intervals.setHorizontalHeader(header);
+    confidence_intervals = new ResultsTable(this);
+    confidence_intervals->setHorizontalHeader(header);
     
     header = data->getHeader();
     header.removeAt(params->getGoldStandard());
     
-    confidence_intervals.setVerticalHeader(header);
-    confidence_intervals.higlight = &ci_hl;
+    confidence_intervals->setVerticalHeader(header);
+    confidence_intervals->higlight = &ci_hl;
     
     for (int i=0; i<NRESULTS; i++)
     {
-        pc_pv[i].setHorizontalHeader(header);
-        pc_pv[i].setVerticalHeader(header);
-        pc_pv[i].higlight = &pc_hl[i];
-        pc_ci[i].setHorizontalHeader(header);
-        pc_ci[i].setVerticalHeader(header);
-        pc_ci[i].higlight = &pc_hl[i];
+        pc_pv[i] = new ResultsTable(this);
+        
+        pc_pv[i]->setHorizontalHeader(header);
+        pc_pv[i]->setVerticalHeader(header);
+        pc_pv[i]->higlight = &pc_hl[i];
+        
+        pc_ci[i] = new ResultsTable(this);
+        
+        pc_ci[i]->setHorizontalHeader(header);
+        pc_ci[i]->setVerticalHeader(header);
+        pc_ci[i]->higlight = &pc_hl[i];
+    }
+}
+
+Results::~Results()
+{
+    delete confidence_intervals;
+    for (int i=0; i<NRESULTS; i++)
+    {
+        delete pc_pv[i];
+        delete pc_ci[i];
     }
 }
 
@@ -119,9 +135,9 @@ void Results::buildHighlightTable(ResultsTable *table, QList<BoolList> *hl_table
 
 void Results::buildHighlightTables()
 {
-    buildHighlightTable(&confidence_intervals, &ci_hl);
+    buildHighlightTable(confidence_intervals, &ci_hl);
     for (int i=0; i<NRESULTS; i++)
     {
-        buildHighlightTable(&pc_pv[i], &pc_hl[i]);
+        buildHighlightTable(pc_pv[i], &pc_hl[i]);
     }
 }

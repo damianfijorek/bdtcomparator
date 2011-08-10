@@ -703,10 +703,10 @@ void Calculator::calculate()
             continue;
         }
         
-        results->confidence_intervals.appendRow(confidenceIntervals(i));
+        results->confidence_intervals->appendRow(confidenceIntervals(i));
     }
     
-    results->confidence_intervals.info[0] = "Conf. level = " + QString::number(params->getConfidenceLevel(), 'f', 4);
+    results->confidence_intervals->info[0] = "Conf. level = " + QString::number(params->getConfidenceLevel(), 'f', 4);
     
     if (n_cols>2)
     {
@@ -759,16 +759,16 @@ void Calculator::calculate()
         }
         
         if (results->toCalculate(ACC))
-            pairwiseComparision(&acc, &results->pc_pv[ACC], &results->pc_ci[ACC]);
+            pairwiseComparision(&acc, results->pc_pv[ACC], results->pc_ci[ACC]);
         if (results->toCalculate(SEN))
-            pairwiseComparision(&sen, &results->pc_pv[SEN], &results->pc_ci[SEN]);
+            pairwiseComparision(&sen, results->pc_pv[SEN], results->pc_ci[SEN]);
         if (results->toCalculate(SPE))
-            pairwiseComparision(&spe, &results->pc_pv[SPE], &results->pc_ci[SPE]);
+            pairwiseComparision(&spe, results->pc_pv[SPE], results->pc_ci[SPE]);
         
         if (results->toCalculate(PPV) || results->toCalculate(NPV))
-            pairwisePredictiveValue(&results->confidence_intervals, &results->pc_pv[PPV], &results->pc_pv[NPV], &results->pc_ci[PPV], &results->pc_ci[NPV]);
+            pairwisePredictiveValue(results->confidence_intervals, results->pc_pv[PPV], results->pc_pv[NPV], results->pc_ci[PPV], results->pc_ci[NPV]);
         if (results->toCalculate(LRP) || results->toCalculate(LRN))
-            pairwiseLikelihoodRatio(&results->confidence_intervals, &results->pc_pv[LRP], &results->pc_pv[LRN], &results->pc_ci[LRP], &results->pc_ci[LRN]);
+            pairwiseLikelihoodRatio(results->confidence_intervals, results->pc_pv[LRP], results->pc_pv[LRN], results->pc_ci[LRP], results->pc_ci[LRN]);
     }
     
     results->buildHighlightTables();

@@ -54,13 +54,14 @@ class Results : public QObject
     Q_OBJECT
 public:
     explicit Results(DataTable *data, Params *params, QObject *parent = 0);
+    ~Results();
     
     QList<BoolList> ci_hl;
-    ResultsTable confidence_intervals;
+    ResultsTable* confidence_intervals;
     
     QList<BoolList> pc_hl[NRESULTS];
-    ResultsTable pc_pv[NRESULTS];
-    ResultsTable pc_ci[NRESULTS];
+    ResultsTable* pc_pv[NRESULTS];
+    ResultsTable* pc_ci[NRESULTS];
     
     void buildHighlightTable(ResultsTable *table, QList<BoolList> *hl_table);
     
