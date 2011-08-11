@@ -20,7 +20,8 @@ SOURCES += main.cpp\
            resultstable.cpp \
            results.cpp \
            params.cpp \
-           aboutdialog.cpp
+           aboutdialog.cpp \
+           permutation.cpp
 
 HEADERS += \
            mainwindow.hpp \
@@ -29,7 +30,8 @@ HEADERS += \
            resultstable.hpp \
            results.hpp \
            params.hpp \
-           aboutdialog.hpp
+           aboutdialog.hpp \
+           permutation.hpp
 
 # Add path to Boost library
 #INCLUDEPATH += BOOST_PATH
