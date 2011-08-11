@@ -48,6 +48,8 @@ const QStringList RESULTS = (QStringList()
                              << "Likelihood ratio of a negative test p-value"
                              << "Likelihood ratio of a negative test confidence intervals");
 
+const QStringList SORT_BY = (QStringList() << "ACC" << "SEN" << "SPE" << "PPV" << "NPV" << "LRP" << "LRN");
+
 namespace Ui {
     class MainWindow;
 }
@@ -70,6 +72,8 @@ private slots:
     void clearResults();
     void initResults();
     void mapResults();
+    void updateResults();
+    void sortResults(bool enabled);
     
     void caseToCalculate(int gs);
     
@@ -92,6 +96,7 @@ private:
     
     DataTable *data;
     Results *results;
+    ResultsTable *current_result;
     Calculator *calculator;
     
 };

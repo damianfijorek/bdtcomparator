@@ -56,6 +56,14 @@ public:
         }
     }
     
+    void resetToIdentity()
+    {
+        for (int i=0; i<length; i++)
+        {
+            list[i].index = i;
+        }
+    }
+    
 private:
     //!length of permutation
     int length;

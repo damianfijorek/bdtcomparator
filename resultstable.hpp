@@ -27,8 +27,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "permutation.hpp"
 
 const int EMPTY = -1;
-const int PV = 100;
-const int CI = 200;
+const int PV  = 100;
+const int CI  = 200;
+
+const int EST = 0;
+const int LOW = 1;
+const int UPP = 2;
 
 class Entry
 {
@@ -81,23 +85,23 @@ public:
 
     QVariant data(const QModelIndex &index, int role) const
     {
+        int row, col;
+        
+        row = permutation->at(index.row());
+        
+        if (constant_columns)
+        {
+            col = index.column();
+        }
+        else
+        {
+            col =  permutation->at(index.column());
+        }
+        
         switch (role)
         {
         case Qt::DisplayRole:
-        {
-            int row, col;
-            
-            row = permutation->at(index.row());
-            
-            if (constant_columns)
-            {
-                col = index.column();
-            }
-            else
-            {
-                col =  permutation->at(index.column());
-            }
-            
+        {   
             Entry e = results.at(row).at(col);
             QString out;
             
@@ -121,7 +125,7 @@ public:
         case Qt::TextAlignmentRole:
             return QVariant(Qt::AlignCenter);
         case Qt::BackgroundRole:
-            if (higlight->at(index.row()).at(index.column()))
+            if (higlight->at(row).at(col))
             {
                 return QVariant(QBrush(QColor(170, 255, 170)));
             }
@@ -141,11 +145,18 @@ public:
         case Qt::DisplayRole:
             if (orientation==Qt::Horizontal)
             {
-                return QVariant(horizontal_header.at(section));
+                if (constant_columns)
+                {
+                    return QVariant(horizontal_header.at(section));
+                }
+                else
+                {
+                    return QVariant(horizontal_header.at(permutation->at(section)));
+                }
             }
             else
             {
-                return QVariant(vertical_header.at(section));
+                return QVariant(vertical_header.at(permutation->at(section)));
             }
         case Qt::TextAlignmentRole:
             return QVariant(Qt::AlignLeft);
@@ -221,12 +232,43 @@ public:
         return results.at(x);
     }
     
+    QList<double> column(int x, int type=EST) const
+    {
+        QList<double> column;
+        
+        for (int i=0; i<this->rowCount(); i++)
+        {
+            column.append(results.at(i).at(x).value.at(type));
+        }
+        
+        return column;
+    }
+    
     QList<BoolList> *higlight;
     QString info[3];
     
 signals:
 
 public slots:
+    void updateAll()
+    {
+        int top = 0;
+        int bottom = this->rowCount() - 1;
+        int left = 0;
+        int right = this->columnCount() - 1;
+        
+        QModelIndex top_left = this->index(top, left);
+        QModelIndex bottom_right = this->index(bottom, right);
+        
+        if (!constant_columns)
+        {
+            this->headerDataChanged(Qt::Horizontal, left, right);
+        }
+        
+        this->headerDataChanged(Qt::Vertical, top, bottom);
+        
+        this->dataChanged(top_left, bottom_right);
+    }
     
 private:
     Permutation *permutation;

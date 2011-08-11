@@ -27,6 +27,8 @@ Results::Results(DataTable *data, Params *params, QObject *parent) :
     // initialize permutation of tests
     permutation = new Permutation(data->numberOfTests());
     
+    this->calculated = false;
+    
     switch (params->getCaseToCalculate())
     {
     case ALL:
@@ -145,4 +147,13 @@ void Results::buildHighlightTables()
     {
         buildHighlightTable(pc_pv[i], &pc_hl[i]);
     }
+}
+
+void Results::sortBy(int id)
+{
+    QList<double> column = confidence_intervals->column(id);
+    
+    permutation->sort(&column);
+    
+    emit resultsChanged();
 }
