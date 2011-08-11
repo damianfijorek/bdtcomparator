@@ -34,6 +34,8 @@ class Params : public QObject
     double confidence_level;
     double pvalue;
     
+    bool sorted;
+    
 public:
     explicit Params(QObject *parent = 0);
     
@@ -62,6 +64,11 @@ public:
         this->case_to_calculate = c;
     }
     
+    bool isSorted() const
+    {
+        return sorted;
+    }
+    
 signals:
     void paramsChanged();
     void gsChanged(int gs);
@@ -87,6 +94,11 @@ public slots:
         pvalue = 1.0 - cl;
         
         emit paramsChanged();
+    }
+    
+    void setSorted(bool sorted)
+    {
+        this->sorted = sorted;
     }
 
 };

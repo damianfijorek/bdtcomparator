@@ -31,6 +31,7 @@ MainWindow::MainWindow(QWidget *parent) :
     this->params = new Params();
     this->data = NULL;
     this->results = NULL;
+    this->current_result = NULL;
     this->calculator = new Calculator(NULL, NULL, params);
     
     /* params */
@@ -57,6 +58,11 @@ MainWindow::MainWindow(QWidget *parent) :
     
     /* Results */
     QObject::connect(ui->resultsComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(setResults(int)));
+    
+    /* Sort */
+    QObject::connect(ui->sortGroupBox, SIGNAL(toggled(bool)), ui->sortComboBox, SLOT(setEnabled(bool)));
+    QObject::connect(ui->sortGroupBox, SIGNAL(toggled(bool)), params, SLOT(setSorted(bool)));
+    QObject::connect(ui->sortGroupBox, SIGNAL(toggled(bool)), this, SLOT(sortResults(bool)));
 }
 
 MainWindow::~MainWindow()
@@ -224,8 +230,6 @@ void MainWindow::clearData()
 
 void MainWindow::setResults(int id)
 {
-    ResultsTable *res = NULL;
-    
     if (results!=NULL)
     {
         if (id>0)
@@ -233,24 +237,24 @@ void MainWindow::setResults(int id)
             id = results_map[id] - 1;
             if (id%2==0)
             {
-                res = results->pc_pv[id/2];
+                current_result = results->pc_pv[id/2];
             }
             else
             {
-                res = results->pc_ci[id/2];
+                current_result = results->pc_ci[id/2];
             }
         }
         else
         {
-            res = results->confidence_intervals;
+            current_result = results->confidence_intervals;
         }
         
-        ui->resultsView->setModel(res);
+        ui->resultsView->setModel(current_result);
         ui->resultsView->resizeColumnsToContents();
         
-        ui->infoLabel1->setText(res->info[0]);
-        ui->infoLabel2->setText(res->info[1]);
-        ui->infoLabel3->setText(res->info[2]);
+        ui->infoLabel1->setText(current_result->info[0]);
+        ui->infoLabel2->setText(current_result->info[1]);
+        ui->infoLabel3->setText(current_result->info[2]);
     }
 }
 
@@ -260,6 +264,9 @@ void MainWindow::clearResults()
     {
         ui->resultsView->setModel(NULL);
         ui->actionSave_Results->setEnabled(false);
+        
+        results->disconnect();
+        current_result = NULL;
         
         delete results;
         
@@ -277,6 +284,10 @@ void MainWindow::clearResults()
         ui->infoLabel3->setText("");
         
         ui->actionCalculate->setEnabled(true);
+        
+        /* Sort criteria */
+        QObject::connect(ui->sortComboBox, SIGNAL(currentIndexChanged(int)), results, SLOT(sortBy(int)));
+        QObject::connect(results, SIGNAL(resultsChanged()), this, SLOT(updateResults()));
     }
 }
 
@@ -285,6 +296,9 @@ void MainWindow::initResults()
     if (results!=NULL)
     {
         ui->resultsView->setModel(NULL);
+        
+        results->disconnect();
+        current_result = NULL;
         
         delete results;
     }
@@ -296,6 +310,10 @@ void MainWindow::initResults()
     calculator->setResults(results);
     
     ui->actionCalculate->setEnabled(true);
+    
+    /* Sort criteria */
+    QObject::connect(ui->sortComboBox, SIGNAL(currentIndexChanged(int)), results, SLOT(sortBy(int)));
+    QObject::connect(results, SIGNAL(resultsChanged()), this, SLOT(updateResults()));
 }
 
 void MainWindow::mapResults()
@@ -315,6 +333,40 @@ void MainWindow::mapResults()
             ui->resultsComboBox->addItem(RESULTS[i]);
             results_map[r] = i;
             r++;
+        }
+    }
+    
+    ui->sortComboBox->clear();
+    
+    for (int i=0; i<NRESULTS; i++)
+    {
+        if (results->toCalculate(i))
+        {
+            ui->sortComboBox->addItem(SORT_BY[i]);
+        }
+    }
+}
+
+void MainWindow::updateResults()
+{
+    if (current_result!=NULL)
+    {
+        current_result->updateAll();
+    }
+}
+
+void MainWindow::sortResults(bool enabled)
+{
+    if (results!=NULL && results->areCalculated())
+    {
+        if (enabled)
+        {
+            int column = ui->sortComboBox->currentIndex();
+            results->sortBy(column);
+        }
+        else
+        {
+            results->resetOrder();
         }
     }
 }
@@ -380,6 +432,7 @@ void MainWindow::calculate()
     calculator->calculate();
     
     ui->tabWidget->setCurrentIndex(1);
+    this->sortResults(params->isSorted());
     this->setResults(ui->resultsComboBox->currentIndex());
 }
 

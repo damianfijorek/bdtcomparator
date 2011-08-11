@@ -37,9 +37,9 @@ const int LRN = 6;
 const int NRESULTS = 7;
 const int NRESTOT  = 1 + NRESULTS * 2;
 
-const int EST  = 0;
-const int LOW  = 1;
-const int UPP  = 2;
+//const int EST  = 0;
+//const int LOW  = 1;
+//const int UPP  = 2;
 
 const QStringList HEADER = (QStringList()
                             << "Diagnostic accuracy"
@@ -80,11 +80,31 @@ public:
     {
         return n_results;
     }
+    
+    void setCalculated(bool calculated)
+    {
+        this->calculated = calculated;
+    }
+    
+    bool areCalculated()
+    {
+        return calculated;
+    }
+    
+    void resetOrder()
+    {
+        permutation->resetToIdentity();
+        
+        emit resultsChanged();
+    }
 
 signals:
+    void resultsChanged();
 
 public slots:
     void buildHighlightTables();
+    
+    void sortBy(int id);
     
 private:
     DataTable *data;
@@ -96,7 +116,8 @@ private:
     
     //! permutation for current order of diagnostic tests
     Permutation *permutation;
-
+    
+    bool calculated;
 };
 
 #endif // RESULTS_HPP

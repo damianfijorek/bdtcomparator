@@ -25,4 +25,6 @@ Params::Params(QObject *parent) :
     case_to_calculate = ALL;
     confidence_level = 0.95;
     pvalue = 0.05;
+    
+    sorted = false;
 }

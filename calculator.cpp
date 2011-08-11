@@ -771,6 +771,7 @@ void Calculator::calculate()
             pairwiseLikelihoodRatio(results->confidence_intervals, results->pc_pv[LRP], results->pc_pv[LRN], results->pc_ci[LRP], results->pc_ci[LRN]);
     }
     
+    results->setCalculated(true);
     results->buildHighlightTables();
     
     emit calculated(true);
