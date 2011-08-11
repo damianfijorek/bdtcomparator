@@ -186,47 +186,6 @@ public:
         vertical_header = header;
     }
     
-    QStringList getVerticalHeader() const
-    {
-        return vertical_header;
-    }
-    
-    QStringList getHorizontalHeader() const
-    {
-        return horizontal_header;
-    }
-    
-    QStringList getRow(int x) const
-    {
-        QStringList row;
-        int length = this->columnCount();
-        
-        for (int i=0; i<length; i++)
-        {  
-            Entry e = results.at(x).at(i);
-            QString out;
-            
-            switch (e.type)
-            {
-            case PV:
-                out = QString::number(e.value.first(), 'f', 4);
-                break;
-            case CI:
-                out = format
-                        .arg(e.value.at(0), 6, 'f', 3)
-                        .arg(e.value.at(1), 6, 'f', 3)
-                        .arg(e.value.at(2), 6, 'f', 3);
-                break;
-            default:
-                out = "";
-            }
-            
-            row << out;
-        }
-        
-        return row;
-    }
-    
     EntryList row(int x) const
     {
         return results.at(x);
