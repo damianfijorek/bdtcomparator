@@ -48,7 +48,7 @@ const QStringList RESULTS = (QStringList()
                              << "Likelihood ratio of a negative test p-value"
                              << "Likelihood ratio of a negative test confidence intervals");
 
-const QStringList SORT_BY = (QStringList() << "ACC" << "SEN" << "SPE" << "PPV" << "NPV" << "LRP" << "LRN");
+const QStringList SORT_BY = (QStringList() << "Acc" << "Se" << "Sp" << "PPV" << "NPV" << "DLR(+)" << "DLR(-)");
 
 namespace Ui {
     class MainWindow;
