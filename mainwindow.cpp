@@ -193,16 +193,31 @@ void MainWindow::on_actionSave_Results_triggered()
                 }
             }
             
+            int n_rows = res->rowCount();
+            int n_cols = res->columnCount();
+            
             QStringList row;
-            row << "" << res->getHorizontalHeader();
+            row << "";
+            
+            for (int j=0; j<n_cols; j++)
+            {
+                row << res->headerData(j, Qt::Horizontal).toString();
+            }
+            
             output << row.join("\t");
             output << "\n";
             
-            int n_rows = res->rowCount();
             for (int j=0; j<n_rows; j++)
             {
                 row.clear();
-                row << res->getVerticalHeader().at(j) << res->getRow(j);
+                
+                row << res->headerData(j, Qt::Vertical).toString();
+                
+                for (int k=0; k<n_cols; k++)
+                {
+                    row << res->data(res->index(j, k), Qt::DisplayRole).toString();
+                }
+                
                 output << row.join("\t");
                 output << "\n";
             }
