@@ -151,9 +151,16 @@ void Results::buildHighlightTables()
 
 void Results::sortBy(int id)
 {
-    QList<double> column = confidence_intervals->column(id);
-    
-    permutation->sort(&column);
-    
-    emit resultsChanged();
+    if (this->calculated)
+    {
+        QList<double> column = confidence_intervals->column(id);
+        
+        permutation->sort(&column);
+        
+        emit resultsChanged();
+    }
+    else
+    {
+        return;
+    }
 }
